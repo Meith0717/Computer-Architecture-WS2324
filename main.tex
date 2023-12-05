@@ -1,14 +1,80 @@
-\documentclass{article}
+\documentclass{report}
+\usepackage{hyperref}
+\usepackage{listings}
 \usepackage{graphicx} % Required for inserting images
 
-\title{\LaTeX}
-\author{YourName}
-\date{}
+\title{Computer Architecture WS2324}
+\author{Thierry Meiers}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+\chapter*{Exercise Sheet 2}
+\section*{Exercise 1}
+\begin{enumerate}
+    \item
+    {
+        For the following C statement, write the corresponding RISC-V assembly code using a minimal number of instructions. Notice that the addi instruction can also contain negative operands!
+        \begin{lstlisting}{language=C}
+        f = g + (h - 5);
+        \end{lstlisting}
+        \textbf{Solution:}
+        \href{https://stackoverflow.com/a/61046459}{Hint}
+        \begin{lstlisting}{language=RISC-V}
+        addi x5 x6 -5       # x5 = h - 5
+        add x5 x7 x5        # x5 = g + x5
+        \end{lstlisting}
+    }
+    \item
+    {
+        Write a single C statement that corresponds to the two RISC-V assembly instructions below.
+        \begin{lstlisting}{language=RISC-V}
+        add x5, x6, x7
+        add x5, x7, x5
+        \end{lstlisting}
+        \textbf{Solution:}
+        \begin{lstlisting}{language=C}
+        f = g + (h + i)
+        \end{lstlisting}
+    }
+    \item 
+    {
+        For the following C statement, write the corresponding RISC-V assembly code using word
+        instructions. Assume that the base addresses of the arrays A and B are in registers x10 and
+        x11, respectively. E.g. lw x5, 40(x10) would load A[10] into register x5.
+        Notice that a word uses 4 bytes in memory, whereas each memory address refers to a single
+        byte. So you have to multiply the array indexes by 4.
+        \begin{lstlisting}{language=C}
+        B[8] = A[i-j];
+        \end{lstlisting}
+        \textbf{Solution:}
+        \begin{lstlisting}{language=RISC-V}
+        sub x5, x6, x7      # x5 = i - j
+        slli x5, x5, 2      # x5 = (i - j) * 4
+        lw x5, 0(x10)       # x5 = A[x5]
+        sw x5, 32(x11)      # B[8] = x5        
+        \end{lstlisting}
+    }
+\end{enumerate}
 
+\section*{Exercise 2}
+We consider a program running at 6 GHz and we assume that electricity if running a the speed of
+light.
+\begin{itemize}
+    \item
+    {
+        What size can your CPU have such that a single can go from one size to the other in a cycle?\\
+        \textbf{Solution:}\\
+        The formula for calculating the distance a signal can travel within a single clock cycle is given by: \[Distance = \frac{Speed_of_light}{Clock_speed} = \frac{3\cdot 10^8 m/s}{6\cdot 10^9Hs} = 0.05m\]
+        So, in one clock cycle of a 6 GHz processor, a signal can travel approximately 5 centimeters.
+    }
+    \item
+    {
+        Can this problem be improved with 3D CPUs?\\
+        \textbf{Solution:}\\
+        Yes! With 3D stacking, you can integrate multiple layers of logic, reducing the distance signals need to travel vertically.
+    }
+\end{itemize}
 \end{document}
